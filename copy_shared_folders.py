@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 
-from __future__ import print_function
 import pickle
 import os.path
-# import urllib
 import argparse
 import sys
 from googleapiclient.discovery import build
@@ -27,6 +25,7 @@ def usage():
     return parser
 
 def copy_files(input_list, dest_folder):
+    """ Copies shared Google Drive folders/files to a specified folder"""
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -57,9 +56,6 @@ def copy_files(input_list, dest_folder):
     for file_ID in file_IDs:
         # Retrieve the existing parents to remove
         file_id = file_ID.splitlines()[0]
-        # file = service.files().get(fileId=file_id, fields='parents').execute()
-        # previous_parents = ",".join(file.get('parents'))
-        # Move the file to the new folder
         file = service.files().update(fileId=file_id, addParents=folder_id, fields='id, parents').execute()
         print("[+] Copying {} of {}".format(count, len(file_IDs)))
         count += 1
